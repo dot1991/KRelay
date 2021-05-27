@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lib_K_Relay.Networking.Packets.DataObjects
+﻿namespace Lib_K_Relay.Networking.Packets.DataObjects
 {
     public class Entity : IDataObject
     {
-        public short ObjectType;
+        public ushort ObjectType;
         public Status Status = new Status();
 
         public IDataObject Read(PacketReader r)
         {
-            ObjectType = r.ReadInt16();
+            ObjectType = r.ReadUInt16();
             Status.Read(r);
 
             return this;
@@ -29,8 +23,8 @@ namespace Lib_K_Relay.Networking.Packets.DataObjects
         {
             return new Entity
             {
-                ObjectType = this.ObjectType,
-                Status = (Status)this.Status.Clone()
+                ObjectType = ObjectType,
+                Status = (Status) Status.Clone()
             };
         }
     }

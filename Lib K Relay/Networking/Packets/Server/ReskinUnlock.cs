@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lib_K_Relay.Networking.Packets.Server
+﻿namespace Lib_K_Relay.Networking.Packets.Server
 {
-	public class ReskinUnlock : Packet
-	{
-		public int SkinId;
+    public class ReskinUnlock : Packet
+    {
+        public int IsPetSkin; // ??? why is it int
+        public int SkinId;
 
-		public override PacketType Type
-		{ get { return PacketType.RESKINUNLOCK; } }
+        public override PacketType Type => PacketType.RESKIN_UNLOCK;
 
-		public override void Read(PacketReader r)
-		{
-			SkinId = r.ReadInt32();
-		}
+        public override void Read(PacketReader r)
+        {
+            SkinId = r.ReadInt32();
+            IsPetSkin = r.ReadInt32();
+        }
 
-		public override void Write(PacketWriter w)
-		{
-			w.Write(SkinId);
-		}
-	}
+        public override void Write(PacketWriter w)
+        {
+            w.Write(SkinId);
+            w.Write(IsPetSkin);
+        }
+    }
 }

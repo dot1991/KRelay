@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lib_K_Relay.Networking.Packets.DataObjects
+﻿namespace Lib_K_Relay.Networking.Packets.DataObjects
 {
     public class LocationRecord : Location
     {
@@ -28,9 +22,9 @@ namespace Lib_K_Relay.Networking.Packets.DataObjects
         {
             return new LocationRecord
             {
-                Time = this.Time,
-                X = base.X,
-                Y = base.Y
+                Time = Time,
+                X = X,
+                Y = Y
             };
         }
 

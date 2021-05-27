@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lib_K_Relay.Networking.Packets.DataObjects
+﻿namespace Lib_K_Relay.Networking.Packets.DataObjects
 {
     public class Tile : IDataObject
     {
+        public ushort Type;
         public short X;
         public short Y;
-        public ushort Type;
 
         public IDataObject Read(PacketReader r)
         {
@@ -32,10 +26,9 @@ namespace Lib_K_Relay.Networking.Packets.DataObjects
         {
             return new Tile
             {
-                X = this.X,
-                Y = this.Y,
-                Type = this.Type
-                
+                X = X,
+                Y = Y,
+                Type = Type
             };
         }
 

@@ -1,111 +1,109 @@
-using Lib_K_Relay.GameData.DataStructures;
-using Lib_K_Relay.Networking.Packets.Client;
-using Lib_K_Relay.Utilities;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
+using Lib_K_Relay.Utilities;
 
-namespace Lib_K_Relay.Networking.Packets
-{
-    public class Packet
-    {
-        public bool Send = true;
-        public byte Id;
-
+namespace Lib_K_Relay.Networking.Packets {
+    public class Packet {
         private byte[] _data;
+        public byte Id;
+        public bool Send = true;
+        public byte[] UnreadData = new byte[0];
 
-        public virtual PacketType Type
-        { get { return PacketType.UNKNOWN; } }
+        public virtual PacketType Type => PacketType.UNKNOWN;
 
-        public virtual void Read(PacketReader r)
-        {
+        public virtual void Read(PacketReader r) {
             _data = r.ReadBytes((int)r.BaseStream.Length - 5); // All of the packet data
         }
 
-        public virtual void Write(PacketWriter w)
-        {
+        public virtual void Write(PacketWriter w) {
             w.Write(_data); // All of the packet data
         }
 
-        public static Packet Create(PacketType type)
-        {
-			PacketStructure st = GameData.GameData.Packets.ByName(type.ToString());
-            Packet packet = (Packet)Activator.CreateInstance(st.Type);
+        public static Packet Create(PacketType type) {
+            var st = GameData.GameData.Packets.ByName(type.ToString());
+            var packet = (Packet)Activator.CreateInstance(st.Type);
             packet.Id = st.ID;
             return packet;
         }
 
-        public static T Create<T>(PacketType type)
-        {
-            Packet packet = (Packet)Activator.CreateInstance(typeof(T));
-			packet.Id = GameData.GameData.Packets.ByName(type.ToString()).ID;
+        public static T Create<T>(PacketType type) {
+            var packet = (Packet)Activator.CreateInstance(typeof(T));
+            packet.Id = GameData.GameData.Packets.ByName(type.ToString()).ID;
             return (T)Convert.ChangeType(packet, typeof(T));
         }
 
-        public T To<T>()
-        {
+        public T To<T>() {
             return (T)Convert.ChangeType(this, typeof(T));
         }
 
-        public static Packet Create(byte[] data)
-        {
-            using (PacketReader r = new PacketReader(new MemoryStream(data)))
-            {
+        public static Packet Create(byte[] data) {
+            using (var r = new PacketReader(new MemoryStream(data))) {
                 r.ReadInt32(); // Skip over int length
-                byte id = r.ReadByte();
-				PacketStructure st = GameData.GameData.Packets.ByID(id);
-                PacketType packetType = st.PacketType;
-                Type type = st.Type;
+                var id = r.ReadByte();
+
+                // 254 = We don't have the packet defined, log data and send back
+                var st = GameData.GameData.Packets.ByID(
+                    !GameData.GameData.Packets.Map.ContainsKey(id) ? (byte)254 : id);
+                var type = st.Type;
+
                 // Reflect the type to a new instance and read its data from the PacketReader
-                Packet packet = (Packet)Activator.CreateInstance(type);
+                var packet = (Packet)Activator.CreateInstance(type);
                 packet.Id = id;
                 packet.Read(r);
+
+                // Handle all unprocessed bytes in order to ensure packet integrity
+                if (r.BaseStream.Position != r.BaseStream.Length) {
+                    var len = r.BaseStream.Length - r.BaseStream.Position;
+                    packet.UnreadData = new byte[len];
+                    var msg = "Packet has unread data left over: " +
+                              "Id=" + packet.Id + ", Data=[";
+                    for (var i = 0; i < len; i++) {
+                        packet.UnreadData[i] = r.ReadByte();
+                        msg += packet.UnreadData[i] + (i == len - 1 ? "]" : ",");
+                    }
+
+                    PluginUtils.Log("Packet", msg);
+                }
 
                 return packet;
             }
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             // Use reflection to get the packet's fields and values so we don't have
             // to formulate a ToString method for every packet type.
-            FieldInfo[] fields = GetType().GetFields(BindingFlags.Public |
-                                              BindingFlags.NonPublic |
-                                              BindingFlags.Instance);
+            var fields = GetType().GetFields(BindingFlags.Public |
+                                             BindingFlags.NonPublic |
+                                             BindingFlags.Instance);
 
-            StringBuilder s = new StringBuilder();
+            var s = new StringBuilder();
             s.Append(Type + "(" + Id + ") Packet Instance");
-            foreach (FieldInfo f in fields)
-                s.Append("\n\t" + f.Name + " => " + f.GetValue(this));
+            foreach (var f in fields) s.Append("\n\t" + f.Name + " => " + f.GetValue(this));
+
             return s.ToString();
         }
 
-        public string ToStructure()
-        {
+        public string ToStructure() {
             // Use reflection to build a list of the packet's fields.
-            FieldInfo[] fields = GetType().GetFields(BindingFlags.Public |
-                                              BindingFlags.NonPublic |
-                                              BindingFlags.Instance);
+            var fields = GetType().GetFields(BindingFlags.Public |
+                                             BindingFlags.NonPublic |
+                                             BindingFlags.Instance);
 
-            StringBuilder s = new StringBuilder();
+            var s = new StringBuilder();
             s.Append(Type + " [" + GameData.GameData.Packets.ByName(Type.ToString()).ID + "] \nPacket Structure:\n{");
-            foreach (FieldInfo f in fields)
-                s.Append("\n  " + f.Name + " => " + f.FieldType.Name);
+            foreach (var f in fields) s.Append("\n  " + f.Name + " => " + f.FieldType.Name);
+
             s.Append("\n}");
             return s.ToString();
         }
     }
 
-    public enum PacketType
-    {
+    public enum PacketType {
         UNKNOWN,
         FAILURE,
-        CREATESUCCESS,
+        CREATE_SUCCESS,
         CREATE,
         PLAYERSHOOT,
         MOVE,
@@ -151,7 +149,7 @@ namespace Lib_K_Relay.Networking.Packets
         CHOOSENAME,
         NAMERESULT,
         CREATEGUILD,
-        CREATEGUILDRESULT,
+        GUILDRESULT,
         GUILDREMOVE,
         GUILDINVITE,
         ALLYSHOOT,
@@ -173,29 +171,47 @@ namespace Lib_K_Relay.Networking.Packets
         JOINGUILD,
         CHANGEGUILDRANK,
         PLAYSOUND,
-        GLOBALNOTIFICATION,
+        GLOBAL_NOTIFICATION,
         RESKIN,
-        ENTERARENA,
-        LEAVEARENA,
-        PETCOMMAND,
-        PETYARDCOMMAND,
-        TINKERQUEST,
-        VIEWQUESTS,
-        ARENADEATH,
-        ARENANEXTWAVE,
-        HATCHEGG,
-        NEWABILITYUNLOCKED,
-        PASSWORDPROMPT,
-        EVOLVEPET,
-        QUESTFETCHRESPONSE,
-        REMOVEPET,
-        UPDATEPET,
-        UPGRADEPETYARDRESULT,
-        VERIFYEMAILDIALOG,
-        QUESTREDEEMRESPONSE,
-		RESKINUNLOCK,
-		RESKINPET,
-		KEYINFOREQUEST,
-		KEYINFORESPONSE
-	}
+        PETUPGRADEREQUEST,
+        ACTIVE_PET_UPDATE_REQUEST,
+        NEW_ABILITY,
+        EVOLVE_PET,
+        DELETE_PET,
+        HATCH_PET,
+        ENTER_ARENA,
+        IMMINENT_ARENA_WAVE,
+        ARENA_DEATH,
+        VERIFY_EMAIL,
+        RESKIN_UNLOCK,
+        PASSWORD_PROMPT,
+        QUEST_REDEEM,
+        QUEST_REDEEM_RESPONSE,
+        KEY_INFO_REQUEST,
+        KEY_INFO_RESPONSE,
+        QUEST_ROOM_MSG,
+        PET_CHANGE_SKIN_MSG,
+        REALM_HERO_LEFT_MSG,
+        RESET_DAILY_QUESTS,
+        NEW_CHARACTER_INFORMATION,
+        UNLOCK_INFORMATION,
+        QUEUE_INFORMATION,
+        QUEUE_CANCEL,
+        EXALTATION_BONUS_CHANGED,
+        REDEEM_EXALTATION_REWARD,
+        VAULT_CONTENT,
+        FORGE_REQUEST,
+        FORGE_RESULT,
+        FORGE_UNLOCKED_BLUEPRINTS,
+        SHOOTACK_COUNTER,
+        CHANGE_ALLY_SHOOT,
+        CREEP_MOVE_MESSAGE,
+
+        // not actually needed, chat server is separate
+        CHAT_HELLO_MSG,
+        CHAT_TOKEN_MSG,
+        //
+
+        UNDEFINED
+    }
 }

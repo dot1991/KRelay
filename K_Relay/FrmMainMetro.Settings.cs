@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Lib_K_Relay.Utilities;
 using MetroFramework;
 using MetroFramework.Components;
 using MetroFramework.Forms;
@@ -17,7 +12,7 @@ namespace K_Relay
 
         private void InitSettings()
         {
-            Invoke((MethodInvoker)delegate
+            Invoke((MethodInvoker) delegate
             {
                 m_themeManager = new FixedStyleManager(this);
                 themeCombobox.Items.AddRange(Enum.GetNames(typeof(MetroThemeStyle)));
@@ -39,33 +34,35 @@ namespace K_Relay
 
         private void styleCombobox_SelectedValueChanged(object sender, EventArgs e)
         {
-            m_themeManager.Style = (MetroColorStyle)Enum.Parse(typeof(MetroColorStyle), (string)styleCombobox.SelectedItem, true);
+            m_themeManager.Style =
+                (MetroColorStyle) Enum.Parse(typeof(MetroColorStyle), (string) styleCombobox.SelectedItem, true);
         }
 
         private void themeCombobox_SelectedValueChanged(object sender, EventArgs e)
         {
-            m_themeManager.Theme = (MetroThemeStyle)Enum.Parse(typeof(MetroThemeStyle), (string)themeCombobox.SelectedItem, true);
+            m_themeManager.Theme =
+                (MetroThemeStyle) Enum.Parse(typeof(MetroThemeStyle), (string) themeCombobox.SelectedItem, true);
         }
 
         private void btnSaveSettings_Click(object sender, EventArgs e)
         {
             Config.Default.StartProxyByDefault = tglStartByDefault.Checked;
             Config.Default.DefaultServerName = lstServers.SelectedItem.ToString();
-            Config.Default.Theme = (MetroThemeStyle)Enum.Parse(typeof(MetroThemeStyle), (string)themeCombobox.SelectedItem, true);
-            Config.Default.Style = (MetroColorStyle)Enum.Parse(typeof(MetroColorStyle), (string)styleCombobox.SelectedItem, true);
+            Config.Default.Theme =
+                (MetroThemeStyle) Enum.Parse(typeof(MetroThemeStyle), (string) themeCombobox.SelectedItem, true);
+            Config.Default.Style =
+                (MetroColorStyle) Enum.Parse(typeof(MetroColorStyle), (string) styleCombobox.SelectedItem, true);
             Config.Default.Save();
 
-            MetroMessageBox.Show(this, "\nYour settings have been saved.", "Save Settings", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MetroMessageBox.Show(this, "\nYour settings have been saved.", "Save Settings", MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
 
         private class FixedStyleManager
         {
-            public event EventHandler OnThemeChanged;
-            public event EventHandler OnStyleChanged;
-
-            private MetroStyleManager m_manager;
-
             private MetroColorStyle m_colorStyle;
+
+            private readonly MetroStyleManager m_manager;
             private MetroThemeStyle m_themeStyle;
 
 
@@ -77,7 +74,7 @@ namespace K_Relay
 
             public MetroColorStyle Style
             {
-                get { return m_colorStyle; }
+                get => m_colorStyle;
                 set
                 {
                     m_colorStyle = value;
@@ -88,7 +85,7 @@ namespace K_Relay
 
             public MetroThemeStyle Theme
             {
-                get { return m_themeStyle; }
+                get => m_themeStyle;
                 set
                 {
                     m_themeStyle = value;
@@ -96,6 +93,9 @@ namespace K_Relay
                     if (OnThemeChanged != null) OnThemeChanged(this, new EventArgs());
                 }
             }
+
+            public event EventHandler OnThemeChanged;
+            public event EventHandler OnStyleChanged;
 
             public void Update()
             {

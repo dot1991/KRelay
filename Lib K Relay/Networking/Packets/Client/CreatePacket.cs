@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lib_K_Relay.Networking.Packets.Client
+﻿namespace Lib_K_Relay.Networking.Packets.Client
 {
     public class CreatePacket : Packet
     {
         public ushort ClassType;
         public ushort SkinType;
 
-        public override PacketType Type
-        { get { return PacketType.CREATE; } }
+        public override PacketType Type => PacketType.CREATE;
 
         public override void Read(PacketReader r)
         {
@@ -22,8 +15,8 @@ namespace Lib_K_Relay.Networking.Packets.Client
 
         public override void Write(PacketWriter w)
         {
-            w.Write((ushort)ClassType);
-            w.Write((ushort)SkinType);
+            w.Write(ClassType);
+            w.Write(SkinType);
         }
     }
 }

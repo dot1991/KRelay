@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lib_K_Relay.Networking.Packets.DataObjects
+﻿namespace Lib_K_Relay.Networking.Packets.DataObjects
 {
     public class SlotObject : IDataObject
     {
         public int ObjectId;
-        public byte SlotId;
         public int ObjectType;
+        public int SlotId;
 
         public IDataObject Read(PacketReader r)
         {
             ObjectId = r.ReadInt32();
-            SlotId = r.ReadByte();
+            SlotId = r.ReadInt32();
             ObjectType = r.ReadInt32();
 
             return this;
@@ -32,9 +26,9 @@ namespace Lib_K_Relay.Networking.Packets.DataObjects
         {
             return new SlotObject
             {
-                ObjectId = this.ObjectId,
-                ObjectType = this.ObjectType,
-                SlotId = this.SlotId
+                ObjectId = ObjectId,
+                ObjectType = ObjectType,
+                SlotId = SlotId
             };
         }
 

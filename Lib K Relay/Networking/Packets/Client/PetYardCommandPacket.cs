@@ -1,9 +1,4 @@
 ﻿using Lib_K_Relay.Networking.Packets.DataObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lib_K_Relay.Networking.Packets.Client
 {
@@ -14,14 +9,13 @@ namespace Lib_K_Relay.Networking.Packets.Client
         public const int FUSE_PET = 3;
 
         public byte CommandId;
-        public int PetId1;
-        public int PetId2;
+        public byte Currency;
         public int ObjectId;
         public SlotObject ObjectSlot;
-        public byte Currency;
+        public int PetId1;
+        public int PetId2;
 
-        public override PacketType Type
-        { get { return PacketType.PETYARDCOMMAND; } }
+        public override PacketType Type => PacketType.PETUPGRADEREQUEST;
 
         public override void Read(PacketReader r)
         {
@@ -29,7 +23,7 @@ namespace Lib_K_Relay.Networking.Packets.Client
             PetId1 = r.ReadInt32();
             PetId2 = r.ReadInt32();
             ObjectId = r.ReadInt32();
-            ObjectSlot = (SlotObject)new SlotObject().Read(r);
+            ObjectSlot = (SlotObject) new SlotObject().Read(r);
             Currency = r.ReadByte();
         }
 
@@ -40,7 +34,7 @@ namespace Lib_K_Relay.Networking.Packets.Client
             w.Write(PetId2);
             w.Write(ObjectId);
             ObjectSlot.Write(w);
-            w.Write((byte)Currency);
+            w.Write(Currency);
         }
     }
 }

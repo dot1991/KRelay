@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lib_K_Relay.Networking.Packets.Client
+﻿namespace Lib_K_Relay.Networking.Packets.Client
 {
     public class ChangeGuildRankPacket : Packet
     {
+        public byte GuildRank;
         public string Name;
-        public int GuildRank;
 
-        public override PacketType Type
-        { get { return PacketType.CHANGEGUILDRANK; } }
+        public override PacketType Type => PacketType.CHANGEGUILDRANK;
 
         public override void Read(PacketReader r)
         {
             Name = r.ReadString();
-            GuildRank = r.ReadInt32();
+            GuildRank = r.ReadByte();
         }
 
         public override void Write(PacketWriter w)

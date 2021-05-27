@@ -1,24 +1,18 @@
-﻿using Lib_K_Relay.Networking.Packets.Server;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Lib_K_Relay.Networking.Packets.Server;
 
 namespace Lib_K_Relay.Networking
 {
     public class State
     {
+        public string AccountId;
         public Client Client;
-        public string GUID;
-        public string ACCID;
 
         public byte[] ConRealKey = new byte[0];
         public string ConTargetAddress = Proxy.DefaultServer;
-        public int ConTargetPort = 2050;
-
-        public ReconnectPacket LastRealm = null;
-        public ReconnectPacket LastDungeon = null;
+        public ushort ConTargetPort = 2050;
+        public string GUID;
 
         public Dictionary<string, dynamic> States;
 
@@ -29,28 +23,29 @@ namespace Lib_K_Relay.Networking
             States = new Dictionary<string, dynamic>();
         }
 
+        public dynamic this[string stateName]
+        {
+            get
+            {
+                dynamic value;
+                States.TryGetValue(stateName, out value);
+                return value;
+            }
+            set => States[stateName] = value;
+        }
+
         public T Value<T>(string stateName)
         {
-            Type type = typeof(T);
-            object value = null;
+            var type = typeof(T);
+            object value;
 
             if (!States.TryGetValue(stateName, out value))
             {
                 value = Activator.CreateInstance(type);
                 States.Add(stateName, value);
             }
-            return (T)value;
-        }
 
-        public dynamic this[string stateName]
-        {
-            get
-            {
-                dynamic value = null;
-                States.TryGetValue(stateName, out value);
-                return value;
-            }
-            set { States[stateName] = value; }
+            return (T) value;
         }
     }
 }

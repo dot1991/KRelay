@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lib_K_Relay.Networking.Packets.Client
+﻿namespace Lib_K_Relay.Networking.Packets.Client
 {
     public class EditAccountListPacket : Packet
     {
@@ -12,8 +6,7 @@ namespace Lib_K_Relay.Networking.Packets.Client
         public bool Add;
         public int ObjectId;
 
-        public override PacketType Type
-        { get { return PacketType.EDITACCOUNTLIST; } }
+        public override PacketType Type => PacketType.EDITACCOUNTLIST;
 
         public override void Read(PacketReader r)
         {

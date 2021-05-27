@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -9,7 +8,7 @@ public class EmbeddedAssembly
 {
     // Version 1.3
 
-    private static Dictionary<string, Assembly> dic = null;
+    private static Dictionary<string, Assembly> dic;
 
     public static void Load(string embeddedResource, string fileName)
     {
@@ -18,9 +17,9 @@ public class EmbeddedAssembly
 
         byte[] ba = null;
         Assembly asm = null;
-        Assembly curAsm = Assembly.GetExecutingAssembly();
+        var curAsm = Assembly.GetExecutingAssembly();
 
-        using (Stream stm = curAsm.GetManifestResourceStream(embeddedResource))
+        using (var stm = curAsm.GetManifestResourceStream(embeddedResource))
         {
             // Either the file is not existed or it is not mark as embedded resource
             if (stm == null)
@@ -45,29 +44,25 @@ public class EmbeddedAssembly
             }
         }
 
-        bool fileOk = false;
-        string tempFile = "";
+        var fileOk = false;
+        var tempFile = "";
 
-        using (SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider())
+        using (var sha1 = new SHA1CryptoServiceProvider())
         {
-            string fileHash = BitConverter.ToString(sha1.ComputeHash(ba)).Replace("-", string.Empty);
+            var fileHash = BitConverter.ToString(sha1.ComputeHash(ba)).Replace("-", string.Empty);
             ;
 
             tempFile = Path.GetTempPath() + fileName;
 
             if (File.Exists(tempFile))
             {
-                byte[] bb = File.ReadAllBytes(tempFile);
-                string fileHash2 = BitConverter.ToString(sha1.ComputeHash(bb)).Replace("-", string.Empty);
+                var bb = File.ReadAllBytes(tempFile);
+                var fileHash2 = BitConverter.ToString(sha1.ComputeHash(bb)).Replace("-", string.Empty);
 
                 if (fileHash == fileHash2)
-                {
                     fileOk = true;
-                }
                 else
-                {
                     fileOk = false;
-                }
             }
             else
             {
@@ -75,10 +70,7 @@ public class EmbeddedAssembly
             }
         }
 
-        if (!fileOk)
-        {
-            System.IO.File.WriteAllBytes(tempFile, ba);
-        }
+        if (!fileOk) File.WriteAllBytes(tempFile, ba);
 
         asm = Assembly.LoadFile(tempFile);
 

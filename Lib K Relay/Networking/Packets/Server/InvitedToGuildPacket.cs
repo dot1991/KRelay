@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lib_K_Relay.Networking.Packets.Server
+﻿namespace Lib_K_Relay.Networking.Packets.Server
 {
     public class InvitedToGuildPacket : Packet
     {
-		public string Name;
-		public string GuildName;
-        public override PacketType Type
-        { get { return PacketType.INVITEDTOGUILD; } }
+        public string GuildName;
+        public string Name;
+
+        public override PacketType Type => PacketType.INVITEDTOGUILD;
 
         public override void Read(PacketReader r)
         {

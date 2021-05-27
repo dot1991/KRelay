@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lib_K_Relay.Networking.Packets.Client
+﻿namespace Lib_K_Relay.Networking.Packets.Client
 {
     public class ChooseNamePacket : Packet
     {
         public string Name;
 
-        public override PacketType Type
-        { get { return PacketType.CHOOSENAME; } }
+        public override PacketType Type => PacketType.CHOOSENAME;
 
         public override void Read(PacketReader r)
         {

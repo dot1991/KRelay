@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lib_K_Relay.Networking.Packets.DataObjects
+﻿namespace Lib_K_Relay.Networking.Packets.DataObjects
 {
     public class Item : IDataObject
     {
-        public int ItemItem;
+        public bool Included;
+        public int ItemId;
         public int SlotType;
         public bool Tradable;
-        public bool Included;
 
         public IDataObject Read(PacketReader r)
         {
-            ItemItem = r.ReadInt32();
+            ItemId = r.ReadInt32();
             SlotType = r.ReadInt32();
             Tradable = r.ReadBoolean();
             Included = r.ReadBoolean();
@@ -25,7 +19,7 @@ namespace Lib_K_Relay.Networking.Packets.DataObjects
 
         public void Write(PacketWriter w)
         {
-            w.Write(ItemItem);
+            w.Write(ItemId);
             w.Write(SlotType);
             w.Write(Tradable);
             w.Write(Included);
@@ -35,16 +29,17 @@ namespace Lib_K_Relay.Networking.Packets.DataObjects
         {
             return new Item
             {
-                ItemItem = this.ItemItem,
-                SlotType = this.SlotType,
-                Tradable = this.Tradable,
-                Included = this.Included
+                ItemId = ItemId,
+                SlotType = SlotType,
+                Tradable = Tradable,
+                Included = Included
             };
         }
 
         public override string ToString()
         {
-            return "{ ItemItem=" + ItemItem + ", SlotType=" + SlotType + ", Tradable=" + Tradable + ", Included=" + Included + " }";
+            return "{ ItemId=" + ItemId + ", SlotType=" + SlotType + ", Tradable=" + Tradable + ", Included=" +
+                   Included + " }";
         }
     }
 }

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace Lib_K_Relay.Interface
+﻿namespace Lib_K_Relay.Interface
 {
     public interface IPlugin
     {

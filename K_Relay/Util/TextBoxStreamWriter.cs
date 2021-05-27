@@ -1,6 +1,5 @@
-﻿using System;
+﻿using System.IO;
 using System.Text;
-using System.IO;
 using System.Windows.Forms;
 using MetroFramework.Controls;
 
@@ -9,7 +8,7 @@ namespace K_Relay.Util
     public class TextBoxStreamWriter : TextWriter
     {
         private StringBuilder _buffer;
-        private RichTextBox _output = null;
+        private readonly RichTextBox _output;
 
         public TextBoxStreamWriter(RichTextBox output)
         {
@@ -17,6 +16,8 @@ namespace K_Relay.Util
             _output = output;
         }
 
+        public override Encoding Encoding => Encoding.UTF8;
+
         public override void Write(char value)
         {
             base.Write(value);
@@ -32,17 +33,12 @@ namespace K_Relay.Util
                 _buffer = new StringBuilder();
             }
         }
-
-        public override Encoding Encoding
-        {
-            get { return System.Text.Encoding.UTF8; }
-        }
     }
 
     public class MetroTextBoxStreamWriter : TextWriter
     {
         private StringBuilder _buffer;
-        private MetroTextBox _output = null;
+        private readonly MetroTextBox _output;
 
         public MetroTextBoxStreamWriter(MetroTextBox output)
         {
@@ -50,6 +46,8 @@ namespace K_Relay.Util
             _output = output;
         }
 
+        public override Encoding Encoding => Encoding.UTF8;
+
         public override void Write(char value)
         {
             base.Write(value);
@@ -64,11 +62,6 @@ namespace K_Relay.Util
 
                 _buffer = new StringBuilder();
             }
-        }
-
-        public override Encoding Encoding
-        {
-            get { return System.Text.Encoding.UTF8; }
         }
     }
 }

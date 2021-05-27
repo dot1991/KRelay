@@ -1,46 +1,43 @@
 ﻿using Lib_K_Relay.Networking.Packets.DataObjects;
 using Lib_K_Relay.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lib_K_Relay.Networking.Packets.Client
 {
     public class AoEPacket : Packet
     {
-        public Location Location;
-        public float Radius;
+        public bool ArmorPierce;
+        public int Color;
         public ushort Damage;
-        public ConditionEffectIndex Effects;
+        public ConditionEffectIndex Effect;
         public float EffectDuration;
         public short OriginType;
-        public int Color;
-        
-        public override PacketType Type
-        { get { return PacketType.AOE; } }
+        public Location Position;
+        public float Radius;
+
+        public override PacketType Type => PacketType.AOE;
 
         public override void Read(PacketReader r)
         {
-            Location = (Location) new Location().Read(r);
+            Position = (Location) new Location().Read(r);
             Radius = r.ReadSingle();
             Damage = r.ReadUInt16();
-            Effects = (ConditionEffectIndex)r.ReadByte();
+            Effect = (ConditionEffectIndex) r.ReadByte();
             EffectDuration = r.ReadSingle();
             OriginType = r.ReadInt16();
             Color = r.ReadInt32();
+            ArmorPierce = r.ReadBoolean();
         }
 
         public override void Write(PacketWriter w)
         {
-            Location.Write(w);
+            Position.Write(w);
             w.Write(Radius);
             w.Write(Damage);
-            w.Write((byte)Effects);
+            w.Write((byte) Effect);
             w.Write(EffectDuration);
             w.Write(OriginType);
             w.Write(Color);
+            w.Write(ArmorPierce);
         }
     }
 }
