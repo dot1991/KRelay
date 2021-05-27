@@ -15,14 +15,15 @@ oSession.utilDecodeResponse();
 oSession.utilReplaceInResponse('<Servers>',
     '<Servers>' +
         '<Server>' +
-            '<Name>Proxy Server</Name>' +
+            '<Name>USSouthWest2</Name>' +
             '<DNS>127.0.0.1</DNS>' +
-            '<Lat>0</Lat>' +
-            '<Long>0</Long>' +
-            '<Usage>0.75</Usage>' +
+            '<Lat>32.80</Lat>' +
+            '<Long>-96.77</Long>' +
+            '<Usage>0.00</Usage>' +
         '</Server>');
 ```
 5. Open Fiddler, K Relay and Exalt
+6. Connect to USSW2 (the proxy server)
 
 ## K Relay Support Discord Server
 Join for help with K Relay, plugin discussions, etc.: https://discord.gg/AUyH8aUj2C
