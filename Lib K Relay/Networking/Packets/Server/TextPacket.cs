@@ -27,7 +27,6 @@ namespace Lib_K_Relay.Networking.Packets.Server
             CleanText = r.ReadString();
             IsSupporter = r.ReadBoolean();
             StarBackground = r.ReadInt32();
-            PluginUtils.Log("text", ToString());
         }
 
         public override void Write(PacketWriter w)
