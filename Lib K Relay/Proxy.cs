@@ -204,8 +204,8 @@ namespace Lib_K_Relay
         /// <summary>
         ///     Fires any registered callbacks for the specified packet type.
         /// </summary>
-        /// <param name="client">Client that recieved the packet</param>
-        /// <param name="packet">Packet that was recieved</param>
+        /// <param name="client">Client that received the packet</param>
+        /// <param name="packet">Packet that was received</param>
         public void FireServerPacket(Client client, Packet packet)
         {
             PluginUtils.ProtectedInvoke(() =>
@@ -228,8 +228,8 @@ namespace Lib_K_Relay
         /// <summary>
         ///     Fires any registered callbacks for the specified packet type.
         /// </summary>
-        /// <param name="client">Client that recieved the packet</param>
-        /// <param name="packet">Packet that was recieved</param>
+        /// <param name="client">Client that received the packet</param>
+        /// <param name="packet">Packet that was received</param>
         public void FireClientPacket(Client client, Packet packet)
         {
             PluginUtils.ProtectedInvoke(() =>

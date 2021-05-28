@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapCacher", "Plugins\MapCac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glow", "Plugins\Glow\Glow.csproj", "{221B82C0-4D31-4EBE-A517-7F4AF8AC1AF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoAim", "Plugins\AutoAim\AutoAim\AutoAim.csproj", "{CF604374-03CB-49DB-B3B5-C58DF6A42D4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{221B82C0-4D31-4EBE-A517-7F4AF8AC1AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{221B82C0-4D31-4EBE-A517-7F4AF8AC1AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{221B82C0-4D31-4EBE-A517-7F4AF8AC1AF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF604374-03CB-49DB-B3B5-C58DF6A42D4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF604374-03CB-49DB-B3B5-C58DF6A42D4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF604374-03CB-49DB-B3B5-C58DF6A42D4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF604374-03CB-49DB-B3B5-C58DF6A42D4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +55,7 @@ Global
 		{F9716B4A-D10D-4098-B79D-84A796F9C584} = {03A97CEB-D1F4-4BD0-A708-8151EF71A8D7}
 		{BD3F0DA6-A032-4F78-932B-492E801B1BA8} = {03A97CEB-D1F4-4BD0-A708-8151EF71A8D7}
 		{221B82C0-4D31-4EBE-A517-7F4AF8AC1AF3} = {03A97CEB-D1F4-4BD0-A708-8151EF71A8D7}
+		{CF604374-03CB-49DB-B3B5-C58DF6A42D4C} = {03A97CEB-D1F4-4BD0-A708-8151EF71A8D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6FBB91BA-4ACE-4EF7-A74D-4ACF86B1B6A0}

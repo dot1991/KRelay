@@ -1,16 +1,18 @@
-﻿namespace Lib_K_Relay.Networking.Packets.Server
+﻿using Lib_K_Relay.Utilities;
+
+namespace Lib_K_Relay.Networking.Packets.Server
 {
     public class TextPacket : Packet
     {
         public byte BubbleTime;
-        public string CleanText;
+        public string CleanText = "";
         public bool IsSupporter;
-        public string Name;
+        public string Name = "";
         public short NumStars;
         public int ObjectId;
-        public string Recipient;
+        public string Recipient = "";
         public int StarBackground;
-        public string Text;
+        public string Text = "";
 
         public override PacketType Type => PacketType.TEXT;
 
@@ -25,6 +27,7 @@
             CleanText = r.ReadString();
             IsSupporter = r.ReadBoolean();
             StarBackground = r.ReadInt32();
+            PluginUtils.Log("text", ToString());
         }
 
         public override void Write(PacketWriter w)

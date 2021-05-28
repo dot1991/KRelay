@@ -53,7 +53,7 @@ namespace Lib_K_Relay.Utilities
             var methodName = site == null ? "<null method reference>" : site.Name;
             var className = site == null ? "" : site.ReflectedType.Name;
 
-            Log("Error", "An exception was thrown\nwithin {0} \nat {1}\n\n{2}",
+            Log("Error", "An exception was thrown within {0} at {1} {2}",
                 caller, className + "." + methodName,
 #if DEBUG
                 e);
@@ -152,15 +152,13 @@ namespace Lib_K_Relay.Utilities
         /// <returns></returns>
         public static TextPacket CreateOryxNotification(string sender, string message)
         {
-            var tpacket = (TextPacket) Packet.Create(PacketType.TEXT);
-            tpacket.BubbleTime = 0;
-            tpacket.CleanText = message;
-            tpacket.Name = "#" + sender;
-            tpacket.NumStars = -1;
-            tpacket.ObjectId = -1;
-            tpacket.Recipient = "";
-            tpacket.Text = message;
-            return tpacket;
+            var text = (TextPacket) Packet.Create(PacketType.TEXT);
+            text.BubbleTime = 0;
+            text.Name = "#" + sender;
+            text.NumStars = -1;
+            text.ObjectId = -1;
+            text.Text = message;
+            return text;
         }
     }
 }

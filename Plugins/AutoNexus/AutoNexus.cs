@@ -235,9 +235,7 @@ namespace AutoNexus
         public string GetDescription()
         {
             return "Attempts to save you from death by nexusing before a fatal blow." +
-                   "\nUnlike other auto nexus systems, this one compensates for piercing attacks, broken armor, and even ground damage*." +
-                   "\nThis plugin will NOT make you completely invulnerable, but it will definitely help prevent you from dying!" +
-                   "\n\n*The exact damage value cannot be determined when taking ground damage, so for safety's sake the plugin will assume that you took the maximum damage possible for the appropriate tile.";
+                   "\nThis plugin will NOT make you completely invulnerable, but it will definitely help prevent you from dying!";
         }
 
         public string GetName()

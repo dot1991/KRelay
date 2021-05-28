@@ -18,6 +18,8 @@ namespace Lib_K_Relay.Networking
             proxy.HookPacket<HelloPacket>(OnHello);
 
             proxy.HookCommand("con", OnConnectCommand);
+            proxy.HookCommand("ip", OnIpCommand);
+            proxy.HookCommand("goto", OnGotoCommand);
         }
 
         private void OnHello(Client client, HelloPacket packet)
@@ -63,6 +65,27 @@ namespace Lib_K_Relay.Networking
             packet.Key = Encoding.UTF8.GetBytes(client.State.GUID);
             packet.Host = "127.0.0.1";
             packet.Port = 2050;
+        }
+
+        private void OnGotoCommand(Client client, string command, string[] args) {
+            if (args.Length == 1) {
+                var reconnect = (ReconnectPacket)Packet.Create(PacketType.RECONNECT);
+                reconnect.Host = args[0];
+                reconnect.Port = 2050;
+                reconnect.GameId = -2;
+                reconnect.Name = "Realm";
+                reconnect.IsFromArena = false;
+                reconnect.Key = new byte[0];
+                reconnect.KeyTime = -1;
+                SendReconnect(client, reconnect);
+            }
+        }
+
+        private void OnIpCommand(Client client, string command, string[] args)
+        {
+            var text = PluginUtils.CreateOryxNotification("Server",
+                "Your current server's IP is: " + client.State.ConTargetAddress);
+            client.SendToClient(text);
         }
 
         private void OnConnectCommand(Client client, string command, string[] args)
